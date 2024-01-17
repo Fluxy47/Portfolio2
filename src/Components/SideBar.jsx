@@ -1,29 +1,41 @@
-import React, { useState } from 'react'
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
 
-const arr = ["Home", "Work", "About","Contact"];
+const arr = ["Home", "Work", "About", "Contact"];
 
 function SideBar() {
-    const [isOpen, setIsOpen] = useState(false);
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 100], [0, 1]);
+  console.log("opacity:", opacity);
+  const controls = useAnimation();
+
+  // useEffect(() => {
+  //   console.log("Scroll Progress:", scrollYProgress.current);
+
+  //   if (scrollYProgress > scrollThreshold) {
+  //     controls.start({ opacity: 1 });
+  //   } else {
+  //     controls.start({ opacity: 0 });
+  //   }
+  // }, [scrollYProgress, controls]);
+
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-    <section  className="fixed top-6 right-3 bg-[blue]  z-[201]">
-      
-      <motion.div
-    //   animate={{ transform: `translate(${position.x}px, ${position.y}px)`}}
-      transition={{ duration: 0.3, ease: "easeIn" }}
-    //    ref={elementRef2}
-       data-value="-7"
-        onClick={() => setIsOpen((prevState) => !prevState)}
-
-        className="bg-[#1C1D20] w-16 h-16 rounded-full fixed top-6 right-3 z-[200] cursor-pointer"
-
-      >
-        lets see
-      </motion.div>
-  
+      <section className="fixed top-6 right-3 bg-[blue]  z-[201]">
+        <motion.div
+          animate={controls}
+          //   animate={{ transform: `translate(${position.x}px, ${position.y}px)`}}
+          transition={{ duration: 0.3, ease: "easeIn" }}
+          //    ref={elementRef2}
+          data-value="-7"
+          onClick={() => setIsOpen((prevState) => !prevState)}
+          className="bg-[#1C1D20] w-16 h-16 rounded-full fixed top-6 right-3 z-[200] cursor-pointer"
+        >
+          lets see
+        </motion.div>
       </section>
-      <motion.section
+      {/* <motion.section
         animate={{
           transform: isOpen
             ? "translate(calc(0% - 0vw), 0) rotate(0.001deg)"
@@ -52,9 +64,9 @@ function SideBar() {
           }}
           className="bg-[#3D3B39] h-screen w-1/2 relative left-[35px] z-[96]"
         />
-      </motion.section>
+      </motion.section> */}
     </>
-  )
+  );
 }
 
-export default SideBar
+export default SideBar;

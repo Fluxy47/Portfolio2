@@ -1,10 +1,16 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from "react";
 import Lenis from "@studio-freight/lenis";
-import Landing from './Components/Landing'
-import { AnimatePresence } from 'framer-motion';
-import Overlay from './Components/Overlay';
-import SideBar from './Components/SideBar';
-
+import Landing from "./Components/Landing";
+import {
+  AnimatePresence,
+  useScroll,
+  motion,
+  useMotionValueEvent,
+} from "framer-motion";
+import Overlay from "./Components/Overlay";
+import SideBar from "./Components/SideBar";
+import About from "./Components/About";
+import Work from "./Components/Work";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,14 +39,21 @@ function App() {
     };
   }, [isLoading]);
 
+  const { scrollY } = useScroll();
+
+  // useMotionValueEvent(scrollY, "change", (latest) => {
+  //   console.log("Page scroll: ", latest);
+  // });
   return (
     <>
-    <AnimatePresence mode="wait">{isLoading && <Overlay />}</AnimatePresence>
-    <SideBar />
-    <Landing />
-    <div className='min-h-screen ' />
+      {/* <AnimatePresence mode="wait">{isLoading && <Overlay />}</AnimatePresence> */}
+      <SideBar />
+      <Landing />
+      <About />
+      <Work />
+      <div className="min-h-screen " />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
