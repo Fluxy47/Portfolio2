@@ -6,14 +6,21 @@ import {
   useScroll,
   motion,
   useMotionValueEvent,
+  useMotionValue
 } from "framer-motion";
 import Overlay from "./Components/Overlay";
 import SideBar from "./Components/SideBar";
-import About from "./Components/About";
-import Work from "./Components/Work";
+import About from "./Containers/About";
+
+import Testing from "./Components/testing";
+import { Route, Routes } from "react-router-dom";
+import Home from "./Containers/Home";
+import Work from "./Containers/Work";
+import Duck from "./Components/duck";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  console.log("window",window.innerHeight,window.innerWidth)
 
   useEffect(() => {
     const lenis = new Lenis();
@@ -39,19 +46,33 @@ function App() {
     };
   }, [isLoading]);
 
-  const { scrollY } = useScroll();
+
 
   // useMotionValueEvent(scrollY, "change", (latest) => {
   //   console.log("Page scroll: ", latest);
   // });
+
+  const [isVisible, setIsVisible] = useState(false);
+  console.log("visibility",isVisible)
+  
+
+  const { scrollY } = useScroll();
+  
+   
+
+  
   return (
     <>
-      {/* <AnimatePresence mode="wait">{isLoading && <Overlay />}</AnimatePresence> */}
+      <AnimatePresence mode="wait">{isLoading && <Overlay />}</AnimatePresence> 
       <SideBar />
-      <Landing />
-      <About />
-      <Work />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Work/*" element={<Work />} />
+        <Route path="/About" element={<About />} />
+      </Routes>
+      {/* <Duck /> */}
       <div className="min-h-screen " />
+      {/* <Testing /> */}
     </>
   );
 }
