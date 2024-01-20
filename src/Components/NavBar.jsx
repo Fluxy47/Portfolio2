@@ -1,29 +1,63 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 
-function NavBar() {
-    const navigate = useNavigate()
-    const arr = [{name:"Work", route:"/Work"},{name:"About", route:"/About"},{name:"Contact", route:"/Contact"}]
+const arr = [
+  { name: "Work", route: "/Work" },
+  { name: "About", route: "/About" },
+  { name: "Contact", route: "/Contact" },
+];
 
-    const handleNavigation = (route) => {
-        navigate(route)
-    }
+function NavBar({ color }) {
+  const navigate = useNavigate();
+  const Home = useRef(null);
+  const myref = useRef(null);
+  const itemsRef = useRef([]);
+
+  useEffect(() => {
+    itemsRef.current = itemsRef.current.slice(0, arr.length);
+  }, []);
+  // const refs = Array.from({ length: arr.length }, () => useRef(null));
+
+  // Apply the custom hook directly in the component body
+  // refs.forEach((ref) => useMouseMovementAnimation(ref));
+  const HomeAnimate = useMouseMovementAnimation(Home);
+
+  const handleNavigation = (route) => {
+    navigate(route);
+  };
 
   return (
-    <section className=" flex justify-between pt-[30px] md:pt-[35px">
-    <h2 onClick={() => handleNavigation("/Home")} className="ml-3 md:ml-10 tracking-wider font-bold  md:text-xl cursor-pointer">
-      @CodeByDenis
-    </h2>
-    <div className="md:flex mr-10 justify-evenly  gap-[2em] hidden">
-      {arr.map((item, idx) => (
-        <h2 onClick={() => handleNavigation(item.route)} className="text-xl font-bold tracking-wider cursor-pointer" key={idx}>
-          {item.name}
+    <section
+      className={`flex justify-between pt-[30px] md:pt-[35px] text-[${color}]`}
+    >
+      <div ref={HomeAnimate} className="p-3">
+        <h2
+          onClick={() => handleNavigation("/")}
+          className="ml-3 md:ml-10 tracking-wider font-bold  md:text-xl cursor-pointer"
+        >
+          @CodeByDenis
         </h2>
-      ))}
-    </div>
-    <h2 className="tracking-wider font-bold md:hidden mr-3">Menu</h2>
-  </section>
-  )
+      </div>
+      <div className="md:flex mr-10 justify-evenly  gap-[2em] hidden">
+        {arr.map((item, idx) => (
+          <div
+            key={idx}
+            className=""
+            ref={(el) => (itemsRef.current[idx] = el)}
+          >
+            <h2
+              onClick={() => handleNavigation(item.route)}
+              className="text-xl font-bold tracking-wider cursor-pointer"
+            >
+              {item.name}
+            </h2>
+          </div>
+        ))}
+      </div>
+      <h2 className="tracking-wider font-bold md:hidden mr-3">Menu</h2>
+    </section>
+  );
 }
 
-export default NavBar
+export default NavBar;
