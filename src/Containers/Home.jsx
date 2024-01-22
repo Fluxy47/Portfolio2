@@ -4,66 +4,77 @@ import Projects from "../Components/Projects";
 import Intro from "../Components/Intro";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Footer from "../Components/Footer";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
   const elementRef = useRef();
 
   // useEffect(() => {
-  //   // Target the element you want to animate
+  //   // Select the carousel container using the ref
   //   const element = elementRef.current;
 
-  //   // Set up the GSAP animation
-  //   gsap.to(element, {
-  //     y: 0, // Set the final y position (0 in this case)
-  //     ease: "power3.inOut", // Choose an easing function
+  //   // Create a timeline for the animations
+  //   const tl = gsap.timeline();
+
+  //   // Set initial position
+  //   gsap.set(element, { borderRadius: "50%" });
+
+  //   // Add animation to the timeline
+  //   tl.to(element, {
+  //     borderRadius: "-=10%",
   //     scrollTrigger: {
   //       trigger: element,
-  //       start: "top center", // Trigger animation when the top of the element hits the center of the viewport
-  //       end: "bottom center", // Trigger animation when the bottom of the element hits the center of the viewport
-  //       scrub: true, // Smoothly animate the element based on scroll position
+  //       scrub: 0.5,
   //     },
   //   });
-  // }, []); // Run this effect only once on component mount
 
-  // useEffect(() => {
-  //   const element = elementRef.current;
+  //   // ScrollTrigger update on component unmount
+  //   return () => {
+  //     tl.kill();
 
-  //   gsap.to(element, {
-  //     y: "200px",
-  //     scrollTrigger: {
-  //       trigger: element,
-  //       start: "top top", // Animation starts when the bottom of the element is at the center of the viewport
-  //       end: "bottom top",
-  //       scrub: 0.2, // Adjust this value for smoother or less smooth movement
-  //       onUpdate: (self) => {
-  //         // Check the direction of scroll
-  //         const direction = self.direction;
-
-  //         // Use interpolate to smoothly transition between values
-  //         const topPosition = gsap.utils.interpolate(
-  //           direction === 1 ? 200 : 0, // Initial top position based on scroll direction
-  //           direction === 1 ? 0 : 200, // Target top position based on scroll direction
-  //           Math.abs(self.progress) // Use the absolute progress value for smooth transition
-  //         );
-
-  //         // Set the top position based on interpolation
-  //         gsap.to(element, {
-  //           y: topPosition,
-  //         });
-  //       },
-  //     },
-  //   });
+  //     ScrollTrigger.getAll().forEach((instance) => instance.kill());
+  //   };
   // }, []);
 
+  useEffect(() => {
+    // Select the carousel container using the ref
+    const element = elementRef.current;
+
+    // Create a timeline for the animations
+    const tl = gsap.timeline();
+
+    // Set initial position
+    gsap.set(element, { y: "-0%" });
+
+    // Add animation to the timeline
+    tl.to(element, {
+      y: "-=40%",
+      scrollTrigger: {
+        trigger: element,
+        scrub: 0.5,
+      },
+    });
+
+    // ScrollTrigger update on component unmount
+    return () => {
+      tl.kill();
+
+      ScrollTrigger.getAll().forEach((instance) => instance.kill());
+    };
+  }, []);
+
   return (
-    <div className="  ">
+    <div className="">
       <Landing />
       <Intro />
       <Projects />
       {/* <div
         ref={elementRef}
-        className="relative top-[200px] bg-white rounded-[50%] w-[120%] h-[700px] z-10"
+        className="bg-[red] w-full h-[500px] rounded-[50%] relative top- z-40"
       ></div> */}
+      <Footer />
     </div>
   );
 };

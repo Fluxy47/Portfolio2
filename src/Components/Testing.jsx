@@ -1,9 +1,8 @@
-import React, { useEffect, useRef,useState } from 'react'
-import gsap from 'gsap';
-import useMouseMovementAnimation from '../util/MouseMoveAnimation';
-import mainVideo from '../assets/try.mp4';
-import previewVideo from '../assets/val.mp4';
-
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import useMouseMovementAnimation from "../util/MouseMoveAnimation";
+import mainVideo from "../assets/try.mp4";
+import previewVideo from "../assets/val.mp4";
 
 function Testing() {
   // const pointer = useRef();
@@ -95,7 +94,7 @@ function Testing() {
   // };
 
   const [isHovered, setIsHovered] = useState(false);
-console.log("is", isHovered)
+  console.log("is", isHovered);
   const handleHover = () => {
     setIsHovered(true);
   };
@@ -104,31 +103,76 @@ console.log("is", isHovered)
     setIsHovered(false);
   };
 
-  const videoSource = isHovered ? mainVideo : previewVideo
- 
+  const videoSource = isHovered ? mainVideo : previewVideo;
+
+  const slideInRef = useRef(null);
+  const slideOutRef = useRef(null);
+
+  useEffect(() => {
+    const slideIn = slideInRef.current;
+    const slideOut = slideOutRef.current;
+
+    // Slide In Animation
+    gsap.from(slideIn, {
+      scaleY: 0,
+      duration: 1,
+      ease: [0.22, 1, 0.36, 1],
+    });
+
+    // Slide Out Animation
+    gsap.to(slideOut, {
+      scaleY: 0,
+      duration: 1,
+      ease: [0.22, 1, 0.36, 1],
+    });
+
+    // Cleanup on unmount
+    return () => {
+      gsap.killTweensOf([slideIn, slideOut]); // Kill the animations to avoid memory leaks
+    };
+  }, []);
+
   return (
-    <div  className='flex min-h-screen justify-center items-center'>
-    {/* <div ref={pointer} className="pointer">
-   <img src="https://assets.codepen.io/756881/pointer.svg" />
-   <p ref={screenLog} className="screen-log text-white">transform: translate(0,0)</p>
- </div>  */}
-<div className='min-h-[800px] w-full max-w-[800px] bg-slate-500 '>
-<video className='w-full h-full' ref={videoRef}      controls
-        onMouseEnter={handleHover}
-        onMouseLeave={handleLeave}  // Autoplay preview loop only if not hovered
-         >
-          {isHovered && (
-          <source
-          videoUrl={mainVideo}
-          previewUrl={previewVideo}
-        />
-      )}
-      
-      <img src={mainVideo} alt="Video Thumbnail" />
-      </video>
-</div>
- </div>
-  )
+    //     <div  className='flex min-h-screen justify-center items-center'>
+    //     <div ref={pointer} className="pointer">
+    //    <img src="https://assets.codepen.io/756881/pointer.svg" />
+    //    <p ref={screenLog} className="screen-log text-white">transform: translate(0,0)</p>
+    //  </div>
+    // <div className='min-h-[800px] w-full max-w-[800px] bg-slate-500 '>
+    // <video className='w-full h-full' ref={videoRef}      controls
+    //         onMouseEnter={handleHover}
+    //         onMouseLeave={handleLeave}  // Autoplay preview loop only if not hovered
+    //          >
+    //           {isHovered && (
+    //           <source
+    //           videoUrl={mainVideo}
+    //           previewUrl={previewVideo}
+    //         />
+    //       )}
+
+    //       <img src={mainVideo} alt="Video Thumbnail" />
+    //       </video>
+    // </div>
+    //  </div>
+    <>
+      <div
+        ref={slideInRef}
+        className="slide-in"
+        // initial={{ scaleY: 0 }}
+        // animate={{ scaleY: 0 }}
+        // exit={{ scaleY: 1 }}
+        // transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      />
+      <div
+        ref={slideOutRef}
+        className="slide-out"
+        // initial={{ scaleY: 1 }}
+        // animate={{ scaleY: 0 }}
+        // exit={{ scaleY: 0 }}
+        // transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </>
+  );
 }
 
-export default Testing
+export default Testing;

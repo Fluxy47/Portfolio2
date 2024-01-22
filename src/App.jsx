@@ -61,13 +61,15 @@ function App() {
     <>
       {/* <AnimatePresence mode="wait">{isLoading && <Overlay />}</AnimatePresence> */}
       <SideBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Work/*" element={<Work />} />
-        <Route path="/About" element={<About />} />
-        <Route path="/Contact" element={<Contact />} />
-      </Routes>
-      <Footer />
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Work/*" element={<Work />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/Contact" element={<Contact />} />
+        </Routes>
+      </AnimatePresence>
+      {/* <Footer /> */}
 
       {/* <Duck /> */}
       {/* <Testing /> */}

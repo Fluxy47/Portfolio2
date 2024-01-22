@@ -2,17 +2,23 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 
-const arr = [
-  { name: "Work", route: "/Work" },
-  { name: "About", route: "/About" },
-  { name: "Contact", route: "/Contact" },
-];
-
 function NavBar({ color }) {
   const navigate = useNavigate();
   const Home = useRef(null);
   const myref = useRef(null);
   const itemsRef = useRef([]);
+  const WorkRef = useRef();
+  const AboutRef = useRef();
+  const ContactRef = useRef();
+  const Work = useMouseMovementAnimation(WorkRef);
+  const About = useMouseMovementAnimation(AboutRef);
+  const Contact = useMouseMovementAnimation(ContactRef);
+
+  const arr = [
+    { name: "Work", route: "/Work", ref: Work },
+    { name: "About", route: "/About", ref: About },
+    { name: "Contact", route: "/Contact", ref: Contact },
+  ];
 
   useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, arr.length);
@@ -41,11 +47,7 @@ function NavBar({ color }) {
       </div>
       <div className="md:flex mr-10 justify-evenly  gap-[2em] hidden">
         {arr.map((item, idx) => (
-          <div
-            key={idx}
-            className=""
-            ref={(el) => (itemsRef.current[idx] = el)}
-          >
+          <div key={idx} className="" ref={item.ref}>
             <h2
               onClick={() => handleNavigation(item.route)}
               className="text-xl font-bold tracking-wider cursor-pointer"

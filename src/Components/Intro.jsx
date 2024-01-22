@@ -1,12 +1,16 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
+import gsap from "gsap";
+import useHoverAnimation from "../util/useHoverAnimation";
 
 function Intro() {
   const circle = useRef(null);
   const Text = useRef(null);
+  const overlayRef = useRef();
 
   const circleAnimate = useMouseMovementAnimation(circle);
   const TextAnimate = useMouseMovementAnimation(Text);
+  useHoverAnimation(circle, overlayRef);
 
   return (
     <div className="  flex flex-col md:flex-row md:justify-center md:items-center mx-[10px] md:mx-[40px] lg:mx-auto gap-[1em] md:gap-[4em] mt-[2em] md:mt-[8em] mb-[5em] md:mb-[20em] relative">
@@ -25,8 +29,12 @@ function Intro() {
         </div>
         <div
           ref={circleAnimate}
-          className="w-48 h-48 rounded-full bg-[#1C1D20] md:mt-[15em] lg:mt-[12em]  md:absolute flex items-center justify-center"
+          className="w-48 h-48 rounded-full bg-[#1C1D20] md:mt-[15em] lg:mt-[12em]  md:absolute flex items-center justify-center overflow-hidden"
         >
+          <div
+            ref={overlayRef}
+            className="absolute w-full h-full bg-[blue] rounded-full top-full"
+          />
           <h2
             ref={TextAnimate}
             className="text-white absolute text-lg flex justify-center items-center w-full h-full"

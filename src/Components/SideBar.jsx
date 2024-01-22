@@ -9,6 +9,7 @@ import {
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+import useHoverAnimation from "../util/useHoverAnimation";
 
 const arr = [
   { name: "Home", route: "/" },
@@ -21,39 +22,41 @@ function SideBar() {
   const scrollY = useRef();
   const controls = useAnimation();
   const circle = useRef(null);
+  const overlayRef = useRef();
   const line1Ref = useRef(null);
   const line2Ref = useRef(null);
   const line3Ref = useRef(null);
   const Menu = useRef(null);
   const MenuAnimate = useMouseMovementAnimation(Menu);
   const circleAnimate = useMouseMovementAnimation(circle);
+  useHoverAnimation(circle, overlayRef);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  const scrollYmotionValue = useMotionValue(
-    window.pageYOffset || window.scrollY
-  );
+  // const scrollYmotionValue = useMotionValue(
+  //   window.pageYOffset || window.scrollY
+  // );
 
-  useEffect(() => {
-    const trackScroll = () => {
-      scrollYmotionValue.set(window.pageYOffset || window.scrollY);
-      scrollY.current = scrollYmotionValue.current;
-      const scrollTriggerPercentage = 0.05;
-      const scrollTriggerPoint =
-        (window.innerHeight || document.documentElement.clientHeight) *
-        scrollTriggerPercentage;
+  // useEffect(() => {
+  //   const trackScroll = () => {
+  //     scrollYmotionValue.set(window.pageYOffset || window.scrollY);
+  //     scrollY.current = scrollYmotionValue.current;
+  //     const scrollTriggerPercentage = 0.05;
+  //     const scrollTriggerPoint =
+  //       (window.innerHeight || document.documentElement.clientHeight) *
+  //       scrollTriggerPercentage;
 
-      if (scrollY.current > scrollTriggerPoint) {
-        controls.start({ opacity: 1 });
-      } else {
-        controls.start({ opacity: 0 });
-      }
-    };
+  //     if (scrollY.current > scrollTriggerPoint) {
+  //       controls.start({ opacity: 1 });
+  //     } else {
+  //       controls.start({ opacity: 0 });
+  //     }
+  //   };
 
-    window.addEventListener("scroll", trackScroll);
+  //   window.addEventListener("scroll", trackScroll);
 
-    return () => window.removeEventListener("scroll", trackScroll);
-  }, [scrollYmotionValue]);
+  //   return () => window.removeEventListener("scroll", trackScroll);
+  // }, [scrollYmotionValue]);
 
   const handleNavigation = (route) => {
     navigate(route);
@@ -80,15 +83,19 @@ function SideBar() {
       <section className="fixed top-6 right-3 bg-[blue]  z-[201]">
         <motion.div
           ref={circleAnimate}
-          initial={{ opacity: 0 }}
-          animate={controls}
+          // initial={{ opacity: 0 }}
+          // animate={controls}
           //   animate={{ transform: `translate(${position.x}px, ${position.y}px)`}}
           transition={{ duration: 0.3, ease: "easeIn" }}
           //    ref={elementRef2}
           data-value="-7"
           onClick={() => setIsOpen((prevState) => !prevState)}
-          className="bg-[#1C1D20] w-20 h-20 rounded-full fixed top-6 right-3 z-[200] cursor-pointer flex items-center justify-center"
+          className="bg-[#1C1D20] w-20 h-20 rounded-full fixed top-6 right-3 z-[200] cursor-pointer flex items-center justify-center overflow-hidden"
         >
+          <div
+            ref={overlayRef}
+            className="absolute w-full h-full bg-[blue] rounded-full top-full"
+          />
           <div
             ref={MenuAnimate}
             className="rounded-full w-full h-full flex items-center justify-center "

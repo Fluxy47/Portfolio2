@@ -4,6 +4,7 @@ import pic from "../assets/pic.jpg";
 import Ukiyo from "ukiyojs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Footer from "../Components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,25 +19,26 @@ function About() {
   // }, []);
 
   useEffect(() => {
-    const element = imageRef.current;
-    const Container = Cont.current;
-    gsap.to(element, {
-      scrollTrigger: {
-        trigger: Container,
-        start: "top bottom", // Animation starts when the bottom of the element is at the center of the viewport
-        end: "bottom top",
-        scrub: 0.2, // Adjust this value for smoother or less smooth movement
-        onUpdate: (self) => {
-          const direction = self.direction;
+    const image = imageRef.current;
 
-          // Animate object position based on scroll direction
-          gsap.to(element, {
-            objectPosition: `+=0% ${direction === 1 ? "-10%" : "10%"}`, // Adjust the value accordingly
-            overwrite: true,
-          });
-        },
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: image,
+        scrub: true, // Enables smooth scrolling animation
       },
     });
+
+    tl.fromTo(
+      image,
+      {
+        yPercent: -20,
+        ease: "none",
+      },
+      {
+        yPercent: 20,
+        ease: "none",
+      }
+    );
   }, []);
 
   return (
@@ -69,7 +71,9 @@ function About() {
           </p>
           <span>Always exploring</span>
         </div>
-        <img ref={imageRef} src={pic} className=" w-full  lg:max-w-[70%] " />
+        <div className="overflow-hidden border-2 border-red-950 w-full lg:max-w-[70%]">
+          <img ref={imageRef} src={pic} className=" w-full" />
+        </div>
       </section>
       <section className="flex flex-col w-[90vw] mx-auto justify-center items-center gap-[2em] mt-[5em]">
         <h1
@@ -117,6 +121,7 @@ function About() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

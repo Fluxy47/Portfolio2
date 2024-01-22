@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/all";
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Draggable);
 
 const arr = [
   {
@@ -38,72 +40,69 @@ function Projects() {
     navigate(`/work/${route}`);
   };
 
-  const Cont = useRef();
   const Caraousel1 = useRef();
   const Caraousel2 = useRef();
-  const Container = Cont.current;
-  const element1 = Caraousel1.current;
-  const element2 = Caraousel2.current;
-  console.log("wicked", Container);
-  console.log("wicked2", element1);
-  console.log("wicked3", element2);
+  const Cont = useRef();
 
   useEffect(() => {
-    if (!Container || !element1 || !element2) {
-      // Log a warning or handle the case where refs are not initialized
-      console.log("One or more refs are not initialized.");
-      return;
-    }
-    console.log("please work");
-    gsap.to(element1, {
-      scrollTrigger: {
-        trigger: Container,
-        start: "top bottom", // Animation starts when the bottom of the element is at the center of the viewport
-        end: "bottom top",
-        scrub: 0.2, // Adjust this value for smoother or less smooth movement
-        onUpdate: (self) => {
-          // Check the direction of scroll
-          const direction = self.direction;
+    // Select the carousel container using the ref
+    const carousel1 = Caraousel1.current;
+    const carousel2 = Caraousel2.current;
 
-          // Update the animation based on scroll direction
-          gsap.to(element1, {
-            x: direction === -1 ? `-50px` : `50px`, // move right if scrolling up, left if scrolling down
-            ease: "power1.out",
-            overwrite: "auto",
-          });
-        },
+    // Create a timeline for the animations
+    const tl = gsap.timeline();
+    const tl2 = gsap.timeline();
+
+    // Set initial position
+    gsap.set(carousel1, { x: "-0%" });
+    gsap.set(carousel2, { x: "-13.5%" });
+
+    // Add animation to the timeline
+    tl.to(carousel1, {
+      x: "-=10%",
+      scrollTrigger: {
+        trigger: carousel1,
+        scrub: 0.5,
       },
     });
 
-    gsap.to(element2, {
+    tl.to(carousel2, {
+      x: "+=10%",
       scrollTrigger: {
-        trigger: Container,
-        start: "top bottom", // Animation starts when the bottom of the element is at the center of the viewport
-        end: "bottom top",
-        scrub: 0.2, // Adjust this value for smoother or less smooth movement
-        onUpdate: (self) => {
-          // Check the direction of scroll
-          const direction = self.direction;
-
-          // Update the animation based on scroll direction
-          gsap.to(element2, {
-            x: direction === 1 ? `-50px` : `50px`, // move right if scrolling up, left if scrolling down
-            ease: "power1.out",
-            overwrite: "auto",
-          });
-        },
+        trigger: carousel2,
+        scrub: 0.5,
       },
     });
-  }, [Container, element1, element2]);
 
-  // animate={{ transform: "translateX(100%)" }}
-  // transition={{ ease: "linear", duration: 500, repeat: Infinity }}
+    // ScrollTrigger update on component unmount
+    return () => {
+      tl.kill();
+      tl2.kill();
+      ScrollTrigger.getAll().forEach((instance) => instance.kill());
+    };
+  }, []);
+
+  useEffect(() => {
+    const carousel = Cont.current;
+
+    // Enable Draggable functionality
+    Draggable.create(carousel, {
+      type: "x",
+      inertia: true,
+      throwProps: true,
+      bounds: { minX: -800, maxX: 300 }, // Adjust the drag limits
+      ease: "power2.out", // Use a power2 easing function for smoother motion
+    });
+
+    return () => {
+      // Clean up Draggable instance on component unmount
+      Draggable.get(carousel).kill();
+    };
+  }, []);
+
   return (
-    <div
-      ref={Cont}
-      className="border-4 border-black min-h-screen  overflow-hidden flex flex-col gap-[5em]"
-    >
-      <section className="flex flex-grow  w-full ">
+    <div className="border-4 border-black min-h-screen overflow-hidden flex flex-col gap-[5em] z-50">
+      <section ref={Cont} className="flex flex-grow  w-full ">
         <div ref={Caraousel1} className="flex gap-[4em]">
           {arr.map((item, idx) => (
             <div

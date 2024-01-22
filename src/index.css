@@ -24,7 +24,6 @@
   display: none;
 }
 
-
 .container {
   display: flex;
   white-space: nowrap;
@@ -59,22 +58,41 @@
 }
 
 .pointer {
-	position: relative;
-	text-align: center;
+  position: relative;
+  text-align: center;
 }
 
 .pointer img {
-	width: 100px;
-	display: block;
-	margin: 0 auto;
+  width: 100px;
+  display: block;
+  margin: 0 auto;
 }
 
 .screen-log {
-	position: absolute;
-	bottom: -3rem;
-	width: 300%;
-	left: -100%;
-	padding-top: 1rem;
-	text-align: center;
+  position: absolute;
+  bottom: -3rem;
+  width: 300%;
+  left: -100%;
+  padding-top: 1rem;
+  text-align: center;
 }
 
+.slide-in {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0f0f0f;
+  transform-origin: bottom;
+}
+
+.slide-in {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0f0f0f;
+  transform-origin: top;
+}

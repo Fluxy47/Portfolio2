@@ -1,6 +1,7 @@
 import React from "react";
 import Projects from "../Components/Projects";
 import NavBar from "../Components/NavBar";
+import Footer from "../Components/Footer";
 
 function Work() {
   return (
@@ -14,6 +15,7 @@ function Work() {
         </div>
       </section>
       <Projects />
+      <Footer />
     </div>
   );
 }
