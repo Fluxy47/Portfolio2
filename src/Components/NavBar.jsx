@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 
-function NavBar({ color }) {
+function NavBar({ color, setIsVisible }) {
   const navigate = useNavigate();
   const Home = useRef(null);
   const myref = useRef(null);
@@ -30,18 +30,31 @@ function NavBar({ color }) {
   const HomeAnimate = useMouseMovementAnimation(Home);
 
   const handleNavigation = (route) => {
-    navigate(route);
+    setIsVisible(true);
+    setTimeout(() => {
+      navigate(route);
+    }, 1000);
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 2000);
   };
+
+  // const handleNavigation = (route) => {
+  //   setIsVisible(true);
+  //   setIsOpen(false);
+  //   setTimeout(() => {
+  //     setIsVisible(false);
+  //     navigate(route);
+  //   }, 5000);
+  // };
 
   return (
     <section
-      className={`flex justify-between pt-[30px] md:pt-[35px] text-[${color}]`}
-    >
+      className={` flex justify-between pt-[30px] md:pt-[35px] text-[${color}]`}>
       <div ref={HomeAnimate} className="p-3">
         <h2
           onClick={() => handleNavigation("/")}
-          className="ml-3 md:ml-10 tracking-wider font-bold  md:text-xl cursor-pointer"
-        >
+          className="ml-3 md:ml-10 tracking-wider font-bold  md:text-xl cursor-pointer">
           @CodeByDenis
         </h2>
       </div>
@@ -50,8 +63,7 @@ function NavBar({ color }) {
           <div key={idx} className="" ref={item.ref}>
             <h2
               onClick={() => handleNavigation(item.route)}
-              className="text-xl font-bold tracking-wider cursor-pointer"
-            >
+              className="text-xl font-bold tracking-wider cursor-pointer">
               {item.name}
             </h2>
           </div>

@@ -10,13 +10,12 @@ function Footer() {
 
   const arr = ["twitter", "insta", "LinkedIn"];
   return (
-    <section className="h-screen relative bg-[#1c1d20] w-full ">
+    <section className="h-screen absolute  bg-[#1c1d20] w-full ">
       <div className="w-[80vw] mx-auto flex flex-col gap-[5em] pt-[6em]">
         <div className=" w-full max-w-[40em]">
           <h1
             style={{ fontSize: "calc(clamp(3.25em, 6vw, 7em) * .875)" }}
-            className=" leading-[1.2] text-white"
-          >
+            className=" leading-[1.2] text-white">
             Lets Work Together
           </h1>
         </div>
@@ -24,12 +23,10 @@ function Footer() {
           <div className="h-[1px] w-full bg-[#adb4b6] " />
           <div
             ref={circleAnimate}
-            className="w-40 h-40 rounded-full bg-[blue] absolute top-[-5em] right-10 flex items-center justify-center"
-          >
+            className="w-40 h-40 rounded-full bg-[blue] absolute top-[-5em] right-10 flex items-center justify-center">
             <h1
               ref={TextAnimate}
-              className="text-white text-lg font-semibold w-full h-full  flex items-center justify-center"
-            >
+              className="text-white text-lg font-semibold w-full h-full  flex items-center justify-center">
               Get In Touch
             </h1>
           </div>

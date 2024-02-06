@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/all";
+import useCarousel from "../util/UseCarousel";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(Draggable);
@@ -31,6 +34,29 @@ const arr = [
   },
 ];
 
+const arr2 = [
+  {
+    src: "https://via.placeholder.com/320?text=1",
+    id: "i",
+  },
+  {
+    src: "https://via.placeholder.com/320?text=2",
+    id: "m",
+  },
+  {
+    src: "https://via.placeholder.com/320?text=3",
+    id: "a",
+  },
+  {
+    src: "https://via.placeholder.com/320?text=4",
+    id: "g",
+  },
+  {
+    src: "https://via.placeholder.com/320?text=5",
+    id: "e",
+  },
+];
+
 // mt-[5em] md:mt-[20em]
 
 function Projects() {
@@ -43,91 +69,153 @@ function Projects() {
   const Caraousel1 = useRef();
   const Caraousel2 = useRef();
   const Cont = useRef();
+  const mycont = useRef();
+
+  // useEffect(() => {
+  //   // Select the carousel container using the ref
+  //   const carousel1 = Caraousel1.current;
+  //   const carousel2 = Caraousel2.current;
+
+  //   // Create a timeline for the animations
+  //   const tl = gsap.timeline();
+  //   const tl2 = gsap.timeline();
+
+  //   // Set initial position
+  //   gsap.set(carousel1, { x: "-0%" });
+  //   gsap.set(carousel2, { x: "-13.5%" });
+
+  //   // Add animation to the timeline
+  //   tl.to(carousel1, {
+  //     x: "-=10%",
+  //     scrollTrigger: {
+  //       trigger: carousel1,
+  //       scrub: 0.5,
+  //     },
+  //   });
+
+  //   tl.to(carousel2, {
+  //     x: "+=10%",
+  //     scrollTrigger: {
+  //       trigger: carousel2,
+  //       scrub: 0.5,
+  //     },
+  //   });
+
+  //   // ScrollTrigger update on component unmount
+  //   return () => {
+  //     tl.kill();
+  //     tl2.kill();
+  //     ScrollTrigger.getAll().forEach((instance) => instance.kill());
+  //   };
+  // }, []);
+
+  // const wrapperRef = useRef(null);
+  // const myRef = useRef();
+  // const proxy1 = useRef();
+  // const wrapperRef2 = useRef(null);
+  // const myRef2 = useRef();
+  // const proxy2 = useRef();
+
+  // useCarousel(wrapperRef, myRef, proxy1);
+  // useCarousel(wrapperRef2, myRef2, proxy2);
+  const containerRef = useRef();
+
+  const [sliderRef, instanceRef] = useKeenSlider({
+    loop: true,
+    mode: "free-snap",
+    slides: {
+      perView: 3,
+      spacing: 15,
+    },
+  });
 
   useEffect(() => {
-    // Select the carousel container using the ref
-    const carousel1 = Caraousel1.current;
-    const carousel2 = Caraousel2.current;
-
-    // Create a timeline for the animations
-    const tl = gsap.timeline();
-    const tl2 = gsap.timeline();
-
-    // Set initial position
-    gsap.set(carousel1, { x: "-0%" });
-    gsap.set(carousel2, { x: "-13.5%" });
-
-    // Add animation to the timeline
-    tl.to(carousel1, {
-      x: "-=10%",
-      scrollTrigger: {
-        trigger: carousel1,
-        scrub: 0.5,
+    // Define ScrollTrigger
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 30%",
+      end: "bottom bottom",
+      markers: true,
+      onToggle: ({ direction }) => {
+        if (direction === 1) {
+          // Scrolling down
+          instanceRef.current?.next();
+        } else {
+          // Scrolling up
+          instanceRef.current?.prev();
+        }
       },
     });
 
-    tl.to(carousel2, {
-      x: "+=10%",
-      scrollTrigger: {
-        trigger: carousel2,
-        scrub: 0.5,
-      },
-    });
-
-    // ScrollTrigger update on component unmount
+    // Cleanup
     return () => {
-      tl.kill();
-      tl2.kill();
-      ScrollTrigger.getAll().forEach((instance) => instance.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
-  useEffect(() => {
-    const carousel = Cont.current;
+  const [sliderRef2, instanceRef2] = useKeenSlider({
+    loop: true,
+    mode: "free-snap",
+    slides: {
+      perView: 3,
+      spacing: 15,
+    },
+  });
 
-    // Enable Draggable functionality
-    Draggable.create(carousel, {
-      type: "x",
-      inertia: true,
-      throwProps: true,
-      bounds: { minX: -800, maxX: 300 }, // Adjust the drag limits
-      ease: "power2.out", // Use a power2 easing function for smoother motion
+  useEffect(() => {
+    // Define ScrollTrigger
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 30%",
+      end: "bottom bottom",
+      markers: true,
+      onToggle: ({ direction }) => {
+        if (direction === 1) {
+          // Scrolling down
+          instanceRef2.current?.prev();
+        } else {
+          // Scrolling up
+          instanceRef2.current?.next();
+        }
+      },
     });
 
+    // Cleanup
     return () => {
-      // Clean up Draggable instance on component unmount
-      Draggable.get(carousel).kill();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
-    <div className="border-4 border-black min-h-screen overflow-hidden flex flex-col gap-[5em] z-50">
-      <section ref={Cont} className="flex flex-grow  w-full ">
-        <div ref={Caraousel1} className="flex gap-[4em]">
-          {arr.map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-[gray] max-h-[450px] w-full min-w-[550px] flex justify-center items-center"
-              onClick={() => handleNavigation(item.route)}
-            >
-              <img src="" className="w-[80%] h-[60%]" />
-            </div>
-          ))}
-        </div>
+    <div
+      ref={containerRef}
+      className="min-h-screen flex flex-col items-center justify-evenly  relative gap-[2em]  pb-[250px] z-[40] ">
+      <section ref={sliderRef} className="keen-slider mt-[8em]">
+        {arr.map((item, idx) => (
+          <div
+            key={idx}
+            className="keen-slider__slide bg-[gray] max-h-[400px] w-full min-w-[250px] flex justify-center items-center">
+            <img
+              src={item.src}
+              alt=""
+              className="w-[80%] h-[80%] object-cover"
+            />
+          </div>
+        ))}
       </section>
 
-      <section className="flex flex-grow  w-full ">
-        <div ref={Caraousel2} className="flex gap-[4em]">
-          {arr.map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-[gray] max-h-[450px] w-full min-w-[550px] flex justify-center items-center"
-              onClick={() => handleNavigation(item.route)}
-            >
-              <img src="" className="w-[80%] h-[60%]" />
-            </div>
-          ))}
-        </div>
+      <section ref={sliderRef2} className="keen-slider">
+        {arr.map((item, idx) => (
+          <div
+            key={idx}
+            className="keen-slider__slide bg-[gray] max-h-[400px] w-full min-w-[250px] flex justify-center items-center">
+            <img
+              src={item.src}
+              alt=""
+              className="w-[80%] h-[80%] object-cover"
+            />
+          </div>
+        ))}
       </section>
     </div>
   );

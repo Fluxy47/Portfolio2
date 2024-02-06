@@ -18,7 +18,7 @@ const arr = [
   { name: "Contact", route: "/Contact" },
 ];
 
-function SideBar() {
+function SideBar({ setIsVisible, setIsDirect }) {
   const scrollY = useRef();
   const controls = useAnimation();
   const circle = useRef(null);
@@ -59,7 +59,13 @@ function SideBar() {
   // }, [scrollYmotionValue]);
 
   const handleNavigation = (route) => {
-    navigate(route);
+    setIsDirect(false);
+    setIsVisible(true);
+    setIsOpen(false);
+    setTimeout(() => {
+      setIsVisible(false);
+      navigate(route);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -77,35 +83,83 @@ function SideBar() {
 
     tl.play();
   }, [isOpen]);
+  const animationRef = useRef(null);
+  useEffect(() => {
+    const container = circleAnimate.current;
+
+    // Create a GSAP timeline
+    const tl = gsap.timeline({ paused: true });
+
+    // Define your animation
+    tl.to(container, { opacity: 0, y: -50, duration: 0.5 });
+
+    // Save the timeline to the ref
+    animationRef.current = tl;
+
+    // Scroll event listener
+    const handleScroll = () => {
+      // Get the scroll position
+      const scrollPosition = window.scrollY;
+
+      // Define the point where you want the animation to start
+      const triggerPoint = 300;
+
+      // Check if we've scrolled past the trigger point
+      if (scrollPosition > triggerPoint) {
+        // If animation is not already playing, play it forward
+        if (!tl.isActive()) {
+          tl.play();
+        }
+      } else {
+        // If animation is not already reversed, reverse it
+        if (tl.isActive()) {
+          tl.reverse();
+        }
+      }
+    };
+
+    // Attach the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleHover = (idx) => {
+    setHoveredIndex(idx);
+    gsap.to(`.rounded-div-${idx}`, { opacity: 1, duration: 0.3 });
+  };
+
+  const handleMouseLeave = (idx) => {
+    setHoveredIndex(null);
+    gsap.to(`.rounded-div-${idx}`, { opacity: 0, duration: 0.3 });
+  };
 
   return (
     <>
       <section className="fixed top-6 right-3 bg-[blue]  z-[201]">
         <motion.div
           ref={circleAnimate}
-          // initial={{ opacity: 0 }}
-          // animate={controls}
-          //   animate={{ transform: `translate(${position.x}px, ${position.y}px)`}}
           transition={{ duration: 0.3, ease: "easeIn" }}
-          //    ref={elementRef2}
           data-value="-7"
           onClick={() => setIsOpen((prevState) => !prevState)}
-          className="bg-[#1C1D20] w-20 h-20 rounded-full fixed top-6 right-3 z-[200] cursor-pointer flex items-center justify-center overflow-hidden"
-        >
+          className="bg-[#1C1D20] w-20 h-20 rounded-full fixed top-6 right-3 z-[200] cursor-pointer flex items-center justify-center overflow-hidden">
           <div
             ref={overlayRef}
             className="absolute w-full h-full bg-[blue] rounded-full top-full"
           />
           <div
             ref={MenuAnimate}
-            className="rounded-full w-full h-full flex items-center justify-center "
-          >
+            className="rounded-full w-full h-full flex items-center justify-center ">
             <svg
               width="30"
               height="30"
               viewBox="0 0 30 30"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <line
                 ref={line1Ref}
                 x1="1"
@@ -144,19 +198,38 @@ function SideBar() {
             : "translate(calc(100% + 6vw),0) rotate(0.001deg)",
         }}
         transition={{ transform: { duration: 0.8, ease: [0.7, 0, 0.2, 1] } }}
-        className="fixed right-0 h-screen w-full lg:w-2/6 z-[99] bg-[#3D3B39]"
-      >
-        <div className="absolute flex justify-center items-center w-full h-full">
-          <div className="border-2 max-h-[60vh] relative z-[98]  min-w-[60%] h-full flex flex-col  items-start gap-[0.5em]">
+        className="fixed right-0 h-screen w-full lg:w-2/6 z-[99] bg-[#141517]">
+        <div className="absolute flex flex-col justify-evenly items-center w-full h-full">
+          <div className=" max-h-[60vh] relative z-[98]  min-w-[60%] h-full flex flex-col  items-start gap-[0.5em]">
+            <p className="text-[#adb4b6] mb-[1em]">Navigation</p>
+            <div className="h-[1px] w-full bg-[#adb4b6] mb-[2em]" />
             {arr.map((item, idx) => (
-              <section key={idx} className="flex items-center gap-[1em]">
-                <div className="w-4 h-4 bg-white rounded-full mt-[10px]" />
+              <section
+                key={idx}
+                className="flex items-center gap-[1em]"
+                onMouseEnter={() => handleHover(idx)}
+                onMouseLeave={() => handleMouseLeave(idx)}>
+                {hoveredIndex === idx && (
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full mt-[10px] rounded-div-${idx}`}
+                  />
+                )}
                 <button onClick={() => handleNavigation(item.route)}>
-                  <motion.h1 className="text-[4em]">{item.name}</motion.h1>
-                  {/* {item} */}
+                  <h1 className="text-[4em] text-white">{item.name}</h1>
                 </button>
               </section>
             ))}
+          </div>
+
+          <div className="flex gap-[2em] items-center justify-center z-[97]">
+            <div className="flex flex-col mt-[-24px]">
+              <h1 className="text-[gray] text-[0.9em] tracking-wide">
+                Socials
+              </h1>
+              <p className=" text-white">Twitter</p>
+            </div>
+            <p className=" text-white">insta</p>
+            <p className=" text-white">LinkedIn</p>
           </div>
         </div>
         <motion.div
@@ -168,7 +241,7 @@ function SideBar() {
             duration: 0.85,
             ease: [0.7, 0, 0.2, 1],
           }}
-          className="bg-[#3D3B39] h-screen w-1/2 relative left-[35px] z-[96]"
+          className="bg-[#141517] h-screen w-1/2 relative left-[35px] z-[96]"
         />
       </motion.section>
     </>

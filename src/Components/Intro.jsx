@@ -2,20 +2,25 @@ import React, { useEffect, useRef } from "react";
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 import gsap from "gsap";
 import useHoverAnimation from "../util/useHoverAnimation";
+import useTextEffect from "../util/useTextEffect";
 
 function Intro() {
   const circle = useRef(null);
   const Text = useRef(null);
+  const textRef = useRef(null);
   const overlayRef = useRef();
 
   const circleAnimate = useMouseMovementAnimation(circle);
   const TextAnimate = useMouseMovementAnimation(Text);
   useHoverAnimation(circle, overlayRef);
+  useTextEffect(textRef, "gray", "black");
 
   return (
     <div className="  flex flex-col md:flex-row md:justify-center md:items-center mx-[10px] md:mx-[40px] lg:mx-auto gap-[1em] md:gap-[4em] mt-[2em] md:mt-[8em] mb-[5em] md:mb-[20em] relative">
       <div className=" md:max-w-[30rem] lg:max-w-[38rem]">
-        <h2 className="text-2xl md:text-3xl font-[450] text-[#1C1D20]">
+        <h2
+          ref={textRef}
+          className="text-2xl md:text-3xl font-[450] text-[#1C1D20]">
           Helping brands to stand out in the digital era. Together we will set
           the new status quo. No nonsense, always on the cutting edge.
         </h2>
@@ -29,16 +34,14 @@ function Intro() {
         </div>
         <div
           ref={circleAnimate}
-          className="w-48 h-48 rounded-full bg-[#1C1D20] md:mt-[15em] lg:mt-[12em]  md:absolute flex items-center justify-center overflow-hidden"
-        >
+          className="w-48 h-48 rounded-full bg-[#1C1D20] md:mt-[15em] lg:mt-[12em]  md:absolute flex items-center justify-center overflow-hidden">
           <div
             ref={overlayRef}
             className="absolute w-full h-full bg-[blue] rounded-full top-full"
           />
           <h2
             ref={TextAnimate}
-            className="text-white absolute text-lg flex justify-center items-center w-full h-full"
-          >
+            className="text-white absolute text-lg flex justify-center items-center w-full h-full">
             About me
           </h2>
         </div>
