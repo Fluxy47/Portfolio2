@@ -8,17 +8,11 @@ import Footer from "../Components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function About({ setIsVisible }) {
-  // clamp(x,x,7em)
-
+function About({ setIsVisible, setIsDirect }) {
   const Cont = useRef(null);
   const imageRef = useRef(null);
   const imageCont = useRef(null);
   const elementRef = useRef();
-  // useEffect(() => {
-  //   const images = myRef.current;
-  //   new Ukiyo(images);
-  // }, []);
 
   useEffect(() => {
     const container = imageCont.current;
@@ -72,8 +66,6 @@ function About({ setIsVisible }) {
     };
   }, []);
 
-  console.log("window", window.innerWidth);
-
   const pinContainer = useRef();
   const pinElement = useRef();
 
@@ -92,7 +84,11 @@ function About({ setIsVisible }) {
 
   return (
     <div>
-      <NavBar color="black" setIsVisible={setIsVisible} />
+      <NavBar
+        color="black"
+        setIsVisible={setIsVisible}
+        setIsDirect={setIsDirect}
+      />
       <section
         ref={Cont}
         className="flex justify-center items-center mt-[12em]">
@@ -205,49 +201,3 @@ function About({ setIsVisible }) {
 }
 
 export default About;
-
-// <section className="flex flex-col w-[90vw] mx-auto justify-center items-center gap-[2em] mt-[5em] pb-[500px]">
-//         <h1
-//           style={{ fontSize: "calc(clamp(3.25em, 5vw, 4.5em) * .75)" }}
-//           className="self-start">
-//           I can help you with ...
-//         </h1>
-//         <div className="flex flex-col md:flex-row w-full gap-[2em] md:gap-[3em]">
-//           <div className="flex flex-col gap-[2em]">
-//             <p className="text-[#adb4b6] text-[0.8em]">01</p>
-//             <div className="h-[1px] w-full bg-[#adb4b6] " />
-//             <h2 className="text-3xl font-[450]">Design</h2>
-//             <div className="w-full max-w-[50em]">
-//               <p>
-//                 With a solid track record in designing websites and apps, I
-//                 deliver strong and user-friendly digital designs. Solid company
-//                 branding is the foundation of any succesful website.
-//               </p>
-//             </div>
-//           </div>
-//           <div className="flex flex-col gap-[2em]">
-//             <p className="text-[#adb4b6] text-[0.8em]">02</p>
-//             <div className="h-[1px] w-full bg-[#adb4b6] " />
-//             <h2 className="text-3xl">Development</h2>
-//             <div className="w-full max-w-[50em]">
-//               <p>
-//                 I build scalable websites from scratch that fit seamlessly with
-//                 design. My focus is on micro animations, transitions and
-//                 interaction. For content management I use Kirby CMS.
-//               </p>
-//             </div>
-//           </div>
-//           <div className="flex flex-col gap-[2em]">
-//             <p className="text-[#adb4b6] text-[0.8em]">03</p>
-//             <div className="h-[1px] w-full bg-[#adb4b6] " />
-//             <h2 className="text-3xl">The full package</h2>
-//             <div className="w-full max-w-[50em]">
-//               <p>
-//                 A complete website from concept to implementation, that's what
-//                 makes me stand out. My great sense for design and my development
-//                 skills enable me to create kick-ass projects.
-//               </p>
-//             </div>
-//           </div>
-//         </div>
-//       </section>

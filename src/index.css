@@ -9,6 +9,11 @@
   font-family: sans-serif;
 }
 
+/* Make scrollbar transparent */
+::-webkit-scrollbar {
+  display: none;
+}
+
 
 
 .container {

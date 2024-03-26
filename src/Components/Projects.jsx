@@ -135,7 +135,7 @@ function Projects() {
       trigger: containerRef.current,
       start: "top 30%",
       end: "bottom bottom",
-      markers: true,
+
       onToggle: ({ direction }) => {
         if (direction === 1) {
           // Scrolling down

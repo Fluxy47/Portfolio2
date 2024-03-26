@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-function Landing({ setIsVisible }) {
+function Landing({ setIsVisible, setIsDirect }) {
   const elementRef = useRef();
   const elementRef2 = useRef();
   useEffect(() => {
@@ -55,7 +55,11 @@ function Landing({ setIsVisible }) {
 
   return (
     <div className="min-h-[105dvh] bg-[#999D9E] relative">
-      <NavBar color="white" setIsVisible={setIsVisible} />
+      <NavBar
+        color="white"
+        setIsVisible={setIsVisible}
+        setIsDirect={setIsDirect}
+      />
       <section className="hidden md:flex w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-between ">
         <div
           ref={elementRef}

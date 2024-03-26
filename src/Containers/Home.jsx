@@ -10,9 +10,9 @@ import { useLocation } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Home = ({ setIsVisible }) => {
+const Home = ({ setIsVisible, setIsDirect }) => {
   const location = useLocation();
-  console.log("location", location.pathname);
+
   const elementRef = useRef();
 
   // useEffect(() => {
@@ -71,7 +71,7 @@ const Home = ({ setIsVisible }) => {
 
   return (
     <div className=" relative z-40 ">
-      <Landing setIsVisible={setIsVisible} />
+      <Landing setIsVisible={setIsVisible} setIsDirect={setIsDirect} />
       <Intro />
       {/* <Projects /> */}
       <Project2 />

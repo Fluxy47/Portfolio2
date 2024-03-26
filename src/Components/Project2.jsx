@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMediaQuery } from "@uidotdev/usehooks";
 gsap.registerPlugin(ScrollTrigger);
 
 const TemArr = [
@@ -62,6 +63,8 @@ const TemArr = [
 ];
 
 function Project2() {
+  const isSmallDevice = useMediaQuery("only screen and (max-width : 768px)");
+
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -70,17 +73,18 @@ function Project2() {
     let scrollTo;
 
     // gsap.set(containerRef.current, { xPercent: 20 });
-    gsap.set(sections, { xPercent: 150 });
+    gsap.set(sections, { xPercent: isSmallDevice ? 50 : 150 });
 
     const scrollTween = gsap.to(sections, {
-      xPercent: -80 * (sections.length - 1),
+      xPercent: isSmallDevice
+        ? -110 * (sections.length - 1)
+        : -80 * (sections.length - 1),
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top 20%",
         pin: true,
         scrub: 0.1,
-        markers: true,
         onRefresh: (self) => {
           const sectionsWidth = sections[0].offsetWidth;
           dragRatio =
@@ -89,38 +93,27 @@ function Project2() {
         end: "+=3000",
       },
     });
-
-    // const tl = gsap.timeline({
-    //   scrollTrigger: {
-    //     trigger: containerRef.current,
-    //     start: "top bottom",
-    //     scrub: true, // Enables smooth scrolling animation
-    //   },
-    // });
-
-    // tl.fromTo(
-    //   ".myclass",
-    //   {
-    //     xPercent: -5,
-    //     ease: "none",
-    //   },
-    //   {
-    //     xPercent: 5,
-    //     ease: "none",
-    //   }
-    // );
-
-    // Clean up
   }, []);
+
+  const myarr = [
+    { name: "project 1", id: 1 },
+    { name: "project 2", id: 2 },
+    { name: "project 3", id: 3 },
+    { name: "project 4", id: 4 },
+    { name: "project 5", id: 5 },
+  ];
 
   return (
     <div
       ref={containerRef}
       className="min-h-screen relative pb-[250px] gap-[2em] z-[40] flex overflow-hidden">
-      {[...Array(5).keys()].map((index) => (
+      {myarr.map((item) => (
         <div
-          key={index}
-          className=" border-4 border-black flex-shrink-0 max-h-[60vh] w-full max-w-[450px] panel overflow-visible">
+          key={item.id}
+          className=" border-4 border-black flex-shrink-0 max-h-[50vh] sm:max-h-[60vh] w-full max-w-[250px] sm:max-w-[450px] panel overflow-visible lg:translate-x-[-80%] 2xl:translate-x-[70%]">
+          <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[20] text-white text-3xl">
+            {item.name}
+          </h1>
           <img
             src=" https://ik.imagekit.io/fluxy/DesignProject/arr4.jpg?tr=w-800"
             alt=""
@@ -133,3 +126,5 @@ function Project2() {
 }
 
 export default Project2;
+
+// {[...Array(5).keys()].map((index) => (

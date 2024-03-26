@@ -4,7 +4,7 @@ import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 import useHoverAnimation from "../util/useHoverAnimation";
 const arr = ["twitter", "insta", "LinkedIn"];
 
-function Contact({ setIsVisible }) {
+function Contact({ setIsVisible, setIsDirect }) {
   const circle = useRef(null);
   const Text = useRef(null);
   const overlayRef = useRef();
@@ -14,7 +14,11 @@ function Contact({ setIsVisible }) {
   useHoverAnimation(circle, overlayRef);
   return (
     <div className="h-full bg-[#1c1d20] relative pb-[200px] min-h-screen">
-      <NavBar color="white" setIsVisible={setIsVisible} />
+      <NavBar
+        color="white"
+        setIsVisible={setIsVisible}
+        setIsDirect={setIsDirect}
+      />
       <section className="flex flex-row-reverse md:flex-row md:justify-center mt-[12em] gap-[10em]">
         <div className="w-full md:max-w-[55em] ml-[30px]">
           <h1

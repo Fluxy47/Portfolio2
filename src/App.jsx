@@ -29,8 +29,8 @@ function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      lerp: 0.07,
+      duration: 1,
+      lerp: 0.06,
       smooth: 2,
       smoothTouch: false,
       touchMultiplier: 2,
@@ -48,7 +48,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setIsDirect(true);
+    // setIsDirect(true);
     setIsVisible(true);
     setTimeout(() => {
       setIsVisible(false);
@@ -62,18 +62,29 @@ function App() {
       <SideBar setIsVisible={setIsVisible} setIsDirect={setIsDirect} />
       <AnimatePresence mode="wait">
         <Routes>
-          <Route path="/" element={<Home setIsVisible={setIsVisible} />} />
+          <Route
+            path="/"
+            element={
+              <Home setIsVisible={setIsVisible} setIsDirect={setIsDirect} />
+            }
+          />
           <Route
             path="/Work/*"
-            element={<Work setIsVisible={setIsVisible} />}
+            element={
+              <Work setIsVisible={setIsVisible} setIsDirect={setIsDirect} />
+            }
           />
           <Route
             path="/About"
-            element={<About setIsVisible={setIsVisible} />}
+            element={
+              <About setIsVisible={setIsVisible} setIsDirect={setIsDirect} />
+            }
           />
           <Route
             path="/Contact"
-            element={<Contact setIsVisible={setIsVisible} />}
+            element={
+              <Contact setIsVisible={setIsVisible} setIsDirect={setIsDirect} />
+            }
           />
         </Routes>
       </AnimatePresence>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 
-function NavBar({ color, setIsVisible }) {
+function NavBar({ color, setIsVisible, setIsDirect }) {
   const navigate = useNavigate();
   const Home = useRef(null);
   const myref = useRef(null);
@@ -30,13 +30,11 @@ function NavBar({ color, setIsVisible }) {
   const HomeAnimate = useMouseMovementAnimation(Home);
 
   const handleNavigation = (route) => {
+    setIsDirect(false);
     setIsVisible(true);
     setTimeout(() => {
       navigate(route);
-    }, 1000);
-    setTimeout(() => {
-      setIsVisible(false);
-    }, 2000);
+    }, 1500);
   };
 
   // const handleNavigation = (route) => {

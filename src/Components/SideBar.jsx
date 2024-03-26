@@ -9,7 +9,10 @@ import {
 import useMouseMovementAnimation from "../util/MouseMoveAnimation";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useHoverAnimation from "../util/useHoverAnimation";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const arr = [
   { name: "Home", route: "/" },
@@ -29,34 +32,11 @@ function SideBar({ setIsVisible, setIsDirect }) {
   const Menu = useRef(null);
   const MenuAnimate = useMouseMovementAnimation(Menu);
   const circleAnimate = useMouseMovementAnimation(circle);
+
   useHoverAnimation(circle, overlayRef);
   const [isOpen, setIsOpen] = useState(false);
+
   const navigate = useNavigate();
-
-  // const scrollYmotionValue = useMotionValue(
-  //   window.pageYOffset || window.scrollY
-  // );
-
-  // useEffect(() => {
-  //   const trackScroll = () => {
-  //     scrollYmotionValue.set(window.pageYOffset || window.scrollY);
-  //     scrollY.current = scrollYmotionValue.current;
-  //     const scrollTriggerPercentage = 0.05;
-  //     const scrollTriggerPoint =
-  //       (window.innerHeight || document.documentElement.clientHeight) *
-  //       scrollTriggerPercentage;
-
-  //     if (scrollY.current > scrollTriggerPoint) {
-  //       controls.start({ opacity: 1 });
-  //     } else {
-  //       controls.start({ opacity: 0 });
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", trackScroll);
-
-  //   return () => window.removeEventListener("scroll", trackScroll);
-  // }, [scrollYmotionValue]);
 
   const handleNavigation = (route) => {
     setIsDirect(false);
@@ -84,48 +64,48 @@ function SideBar({ setIsVisible, setIsDirect }) {
     tl.play();
   }, [isOpen]);
   const animationRef = useRef(null);
-  useEffect(() => {
-    const container = circleAnimate.current;
+  // useEffect(() => {
+  //   const container = circleAnimate.current;
 
-    // Create a GSAP timeline
-    const tl = gsap.timeline({ paused: true });
+  //   // Create a GSAP timeline
+  //   const tl = gsap.timeline({ paused: true });
 
-    // Define your animation
-    tl.to(container, { opacity: 0, y: -50, duration: 0.5 });
+  //   // Define your animation
+  //   tl.to(container, { opacity: 0, y: -50, duration: 0.5 });
 
-    // Save the timeline to the ref
-    animationRef.current = tl;
+  //   // Save the timeline to the ref
+  //   animationRef.current = tl;
 
-    // Scroll event listener
-    const handleScroll = () => {
-      // Get the scroll position
-      const scrollPosition = window.scrollY;
+  //   // Scroll event listener
+  //   const handleScroll = () => {
+  //     // Get the scroll position
+  //     const scrollPosition = window.scrollY;
 
-      // Define the point where you want the animation to start
-      const triggerPoint = 300;
+  //     // Define the point where you want the animation to start
+  //     const triggerPoint = 300;
 
-      // Check if we've scrolled past the trigger point
-      if (scrollPosition > triggerPoint) {
-        // If animation is not already playing, play it forward
-        if (!tl.isActive()) {
-          tl.play();
-        }
-      } else {
-        // If animation is not already reversed, reverse it
-        if (tl.isActive()) {
-          tl.reverse();
-        }
-      }
-    };
+  //     // Check if we've scrolled past the trigger point
+  //     if (scrollPosition > triggerPoint) {
+  //       // If animation is not already playing, play it forward
+  //       if (!tl.isActive()) {
+  //         tl.play();
+  //       }
+  //     } else {
+  //       // If animation is not already reversed, reverse it
+  //       if (tl.isActive()) {
+  //         tl.reverse();
+  //       }
+  //     }
+  //   };
 
-    // Attach the scroll event listener
-    window.addEventListener("scroll", handleScroll);
+  //   // Attach the scroll event listener
+  //   window.addEventListener("scroll", handleScroll);
 
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  //   // Clean up the event listener on component unmount
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -139,6 +119,22 @@ function SideBar({ setIsVisible, setIsDirect }) {
     gsap.to(`.rounded-div-${idx}`, { opacity: 0, duration: 0.3 });
   };
 
+  useEffect(() => {
+    gsap.set(".myclass", { scale: 0 });
+
+    gsap.to(".myclass", {
+      scale: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "body", // technically not neccessary - when you don't pin anything, the body will be the default
+        start: 0,
+        end: "+=50%",
+        scrub: true,
+        markers: true,
+      },
+    });
+  }, []);
+
   return (
     <>
       <section className="fixed top-6 right-3 bg-[blue]  z-[201]">
@@ -147,7 +143,7 @@ function SideBar({ setIsVisible, setIsDirect }) {
           transition={{ duration: 0.3, ease: "easeIn" }}
           data-value="-7"
           onClick={() => setIsOpen((prevState) => !prevState)}
-          className="bg-[#1C1D20] w-20 h-20 rounded-full fixed top-6 right-3 z-[200] cursor-pointer flex items-center justify-center overflow-hidden">
+          className="myclass bg-[#1C1D20] w-20 h-20 rounded-full fixed top-6 right-3 z-[200] cursor-pointer flex items-center justify-center overflow-hidden">
           <div
             ref={overlayRef}
             className="absolute w-full h-full bg-[blue] rounded-full top-full"
@@ -193,9 +189,10 @@ function SideBar({ setIsVisible, setIsDirect }) {
       </section>
       <motion.section
         animate={{
-          transform: isOpen
-            ? "translate(calc(0% - 0vw), 0) rotate(0.001deg)"
-            : "translate(calc(100% + 6vw),0) rotate(0.001deg)",
+          transform: `translate(${
+            isOpen ? "0%" : "calc(100% + 6vw)"
+          }, 0) rotate(0.001deg)`,
+          borderRadius: isOpen ? 0 : "30px 0 0 30px",
         }}
         transition={{ transform: { duration: 0.8, ease: [0.7, 0, 0.2, 1] } }}
         className="fixed right-0 h-screen w-full lg:w-2/6 z-[99] bg-[#141517]">
@@ -235,7 +232,7 @@ function SideBar({ setIsVisible, setIsDirect }) {
         <motion.div
           animate={{
             borderRadius: isOpen ? 0 : "60% 0 0 60%",
-            transform: isOpen ? "translateX(-5%)" : "translateX(-40%)",
+            transform: isOpen ? "translateX(-17%)" : "translateX(-20%)",
           }}
           transition={{
             duration: 0.85,

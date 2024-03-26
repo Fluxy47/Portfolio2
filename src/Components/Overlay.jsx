@@ -52,7 +52,7 @@ const Overlay = ({ animateIn }) => {
 
   return (
     <div
-      className="your-container bg-[#181418] text-white h-[101vh] w-full fixed top-0 left-0 z-[99]"
+      className="your-container bg-[#181418] text-white h-[101vh] w-full fixed top-0 left-0 z-[999999999999999]"
       style={{ borderRadius: "0 0 15% 15%" }}>
       <div className="relative flex flex-col h-screen justify-center items-center z-20">
         <section className="block mx-[1em] text-center max-w-[600px] ">

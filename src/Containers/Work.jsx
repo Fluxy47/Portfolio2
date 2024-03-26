@@ -4,8 +4,9 @@ import NavBar from "../Components/NavBar";
 import Footer from "../Components/Footer";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Testing from "../Components/testing";
 
-function Work({ setIsVisible }) {
+function Work({ setIsVisible, setIsDirect }) {
   const elementRef = useRef();
   useEffect(() => {
     // Select the carousel container using the ref
@@ -33,9 +34,14 @@ function Work({ setIsVisible }) {
       ScrollTrigger.getAll().forEach((instance) => instance.kill());
     };
   }, []);
+
   return (
     <div className="min-h-screen">
-      <NavBar color="black" setIsVisible={setIsVisible} />
+      <NavBar
+        color="black"
+        setIsVisible={setIsVisible}
+        setIsDirect={setIsDirect}
+      />
       <section className="flex flex-col items-center justify-center gap-[5em] mt-[5.5em] mb-[5em]">
         <div className="flex items-start  w-full max-w-[55em] ">
           <h1
@@ -63,7 +69,7 @@ function Work({ setIsVisible }) {
 
           <section className="flex gap-[0.5em]">
             {" "}
-            <div className="bg-[#1C1D20] w-20 h-20 rounded-full  z-[200] cursor-pointer flex items-center justify-center overflow-hidden">
+            <div className="bg-[#1C1D20] w-20 h-20 rounded-full  cursor-pointer flex items-center justify-center overflow-hidden">
               {/* <div className="absolute w-full h-full bg-[blue] rounded-full top-full" /> */}
               <div className="rounded-full w-full h-full flex items-center justify-center ">
                 <svg
@@ -99,7 +105,7 @@ function Work({ setIsVisible }) {
               </div>
             </div>
             {/* second circle */}
-            <div className="bg-[#1C1D20] w-20 h-20 rounded-full  z-[200] cursor-pointer flex items-center justify-center overflow-hidden">
+            <div className="bg-[#1C1D20] w-20 h-20 rounded-full  cursor-pointer flex items-center justify-center overflow-hidden">
               {/* <div className="absolute w-full h-full bg-[blue] rounded-full top-full" /> */}
               <div className="rounded-full w-full h-full flex items-center justify-center ">
                 <svg
@@ -137,7 +143,8 @@ function Work({ setIsVisible }) {
           </section>
         </section>
       </section>
-      <Projects />
+      <Testing />
+      {/* <Projects /> */}
       {/* <Work2 /> */}
       <div
         ref={elementRef}
